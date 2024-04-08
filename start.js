@@ -18,7 +18,7 @@ export default () => {
         limit: '500mb'
     }));
     app.use(cors({
-        origin: ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1', 'https://kidup.kz'],
+        origin: ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1', 'https://kidup.kz', 'https://rent.kidup.kz', 'http://rent.kidup.kz'],
         credentials: true,
         preflightContinue: true,
         methods: ['GET', 'POST', 'PUT', 'PATCH' , 'DELETE', 'OPTIONS'],
