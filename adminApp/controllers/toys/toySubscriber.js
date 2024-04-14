@@ -39,11 +39,11 @@ export const createSubscriber = async (req, res) => {
 
 export const updateSubscriber = async (req, res) => {
     const {id} = req.params;
-    const {name, rate, ratePrice, sale, tokens, fromRef, startSubscription, endSubscription, activeToys, comment, status, active, address} = req.body;
+    const {name, phone, rate, ratePrice, sale, tokens, fromRef, startSubscription, endSubscription, activeToys, comment, status, active, address} = req.body;
 
     try {
         await models.ToySubscriber.update({
-            name, rate, ratePrice, sale, tokens, fromRef, startSubscription, endSubscription, activeToys, comment, status, active, address
+            name, phone, rate, ratePrice, sale, tokens, fromRef, startSubscription, endSubscription, activeToys, comment, status, active, address
         }, {where: {id}})
     } catch (e) {
         return res.status(500).json(createError("Не могу создать"));

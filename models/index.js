@@ -19,6 +19,8 @@ import getToyModel from "./toys/toy.js";
 import getToySubscribeRequestModel from "./toys/toySubscribeRequest.js";
 import getToyCategoryModel from "./toys/toyCategory.js";
 import getToySubscriberModel from "./toys/toySubscriber.js";
+import getToyPackModel from "./toys/toyPack.js";
+import getToyPackCategoryModel from "./toys/toyPackCategory.js";
 
 const sequelize = new Sequelize(process.env.DATABASE, process.env.DATABASE_USER, process.env.DATABASE_PASSWORD, {
     dialect: process.env.DATABASE_DIALECT,
@@ -55,6 +57,9 @@ const models = {
     ToyCategory: getToyCategoryModel(sequelize),
     ToySubscribeRequest: getToySubscribeRequestModel(sequelize),
     ToySubscriber: getToySubscriberModel(sequelize),
+
+    ToyPack: getToyPackModel(sequelize),
+    ToyPackCategory: getToyPackCategoryModel(sequelize),
 }
 
 // Связываю юзера и роли
@@ -120,6 +125,10 @@ models.User.hasMany(models.QuestionRequest, {foreignKey: "user_id"});
 // Связываю игрушки и категории
 models.ToyCategory.belongsToMany(models.Toy, {through: "toy_category", as: "toys"});
 models.Toy.belongsToMany(models.ToyCategory, {through: "toy_category", as: "categories"});
+
+// Связываю пакет игрушек и категорию пакетов
+models.ToyPack.belongsTo(models.ToyPackCategory, {foreignKey: "category_id"});
+models.ToyPackCategory.hasMany(models.ToyPack, {foreignKey: "category_id", onDelete: 'cascade'});
 
 export {sequelize};
 

@@ -13,6 +13,7 @@ import getToyRoutes from "./toys/toy.js";
 import getCategoryToyRoutes from "./toys/toyCategory.js";
 import getToySubscribeRequestRoutes from "./toys/toysSubscribeRequest.js";
 import getToySubscriberRoutes from "./toys/toySubscriber.js";
+import getToyPacksRoutes from "./toys/toyPacks.js";
 
 export default app => {
     const BaseUrl = "/api/v1/admin";
@@ -30,4 +31,5 @@ export default app => {
     app.use(`${BaseUrl}/toyCategory`, getCategoryToyRoutes(app))
     app.use(`${BaseUrl}/toySubscribeRequest`, getToySubscribeRequestRoutes(app))
     app.use(`${BaseUrl}/toySubscriber`, getToySubscriberRoutes(app))
+    app.use(`${BaseUrl}/toyPacks`, getToyPacksRoutes(app))
 }
