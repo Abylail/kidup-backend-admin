@@ -16,6 +16,25 @@ const generateAccessToken = (user_id, role_code) => {
 const generateSmsCode = () => Math.floor(1000 + Math.random() * 9000);
 
 // Отправить смс для авторизации
+export const resetPassword = async (req, res) => {
+    const {phone, password, sms_code} = req.body;
+
+    if (!phone || !password || !sms_code) return res.status(500).json(createError("Введите все данные"))
+
+    // Проверяю смс код
+    const smsConfirm = await models.SmsConfirm.findOne({where: {phone}});
+    if (!smsConfirm) return res.status(500).json(createError("Смс не был отправлен"));
+    const isCodeMatch = smsConfirm.dataValues.sms_code === sms_code;
+    if (!isCodeMatch) return res.status(500).json(createError("Неверный смс код"));
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await models.User.update({ password: hashedPassword}, {where: {phone}});
+
+    return res.status(200).json({status: "OK"})
+}
+
+// Отправить смс для авторизации
 export const sendConfirmSms = async (req, res) => {
     const {phone} = req.body;
 
@@ -45,9 +64,9 @@ export const centerRegister = async (req, res) => {
         center_name, start_time, end_time, call_phone, whatsapp_phone, description
     } = req.body;
 
-    if (!phone || !sms_code || !first_name || !last_name || !password || !center_name || !start_time || !end_time || !call_phone || !whatsapp_phone || !description) return res.status(500).json(createError("Пожалуйта введите все данные"));
+    if (!phone || !sms_code || !first_name || !last_name || !password || !center_name || !start_time || !end_time || !description) return res.status(500).json(createError("Пожалуйта введите все данные"));
 
-    const RoleCode = "center_director";
+    const RoleId = 2;// "center_director";
     const InstitutionTypeCode = "center";
 
     // Проверяю зарегестрирован ли он
@@ -67,7 +86,7 @@ export const centerRegister = async (req, res) => {
             last_name,
             phone,
             password,
-            role_code: RoleCode,
+            role_id: RoleId,
         })
     } catch (e) {
         return res.status(500).json(createError("Не могу создать пользователя"));
