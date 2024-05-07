@@ -14,8 +14,10 @@ export const sendSms = async (req, res) => {
 
     const smsCode = generateSmsCode();
 
-    const smsSuccess = await sendSmsService(phone, `Ваш код для входа kidup: ${smsCode}`);
-    if (!smsSuccess) return res.status(500).json(createError("Не удалось отправить смс"))
+    if (process.env.PROCESS_TYPE !== "test") {
+        const smsSuccess = await sendSmsService(phone, `Ваш код для входа kidup: ${smsCode}`);
+        if (!smsSuccess) return res.status(500).json(createError("Не удалось отправить смс"))
+    }
 
     const smsConfirmOld = await models.SmsConfirm.findOne({where: {phone}})
 
@@ -26,6 +28,7 @@ export const sendSms = async (req, res) => {
         return res.status(500).json(createError("Не могу отправить смс"))
     }
 
+    if (process.env.PROCESS_TYPE === "test") return res.status(200).json({status: "OK", smsCode})
     return res.status(200).json({status: "OK"})
 }
 

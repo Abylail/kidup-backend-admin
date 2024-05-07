@@ -9,6 +9,10 @@ const getParentModel = sequelize => {
             type: DataTypes.STRING,
             unique: false
         },
+        bonuses: {
+            type: DataTypes.INTEGER,
+            default: 0
+        }
     })
 
     return Parent;
