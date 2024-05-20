@@ -32,6 +32,19 @@ export const sendSms = async (req, res) => {
     return res.status(200).json({status: "OK"})
 }
 
+// Существует ли родитель
+export const parentExist = async (req, res) => {
+    const {phone} = req.body;
+    if (!phone) return res.status(500).json(createError("Нет телефона"))
+    return !!await models.Parent.findOne({where: {phone}});
+}
+
+// Проверить код смс
+export const phoneSmsConfirm = async (req, res) => {
+    const {phone, sms_code} = req.body;
+    return await models.SmsConfirm.findOne({where: {phone, sms_code}})
+}
+
 export const phoneSmsAuth = async (req, res) => {
     const {phone, sms_code} = req.body;
     if (!phone || !sms_code) return res.status(500).json(createError("Отсутсвуют нужные атрибуты"));

@@ -22,6 +22,8 @@ import getToySubscriberModel from "./toys/toySubscriber.js";
 import getToyPackModel from "./toys/toyPack.js";
 import getToyPackCategoryModel from "./toys/toyPackCategory.js";
 import getToySurveyModel from "./toys/toySurvey.js";
+import getAnnouncementModel from "./announcement/announcement.js";
+import getAnnouncementCategoryModel from "./announcement/announcementCategory.js";
 
 const sequelize = new Sequelize(process.env.DATABASE, process.env.DATABASE_USER, process.env.DATABASE_PASSWORD, {
     dialect: process.env.DATABASE_DIALECT,
@@ -62,6 +64,13 @@ const models = {
 
     ToyPack: getToyPackModel(sequelize),
     ToyPackCategory: getToyPackCategoryModel(sequelize),
+
+    Announcement: getAnnouncementModel(sequelize),
+    AnnouncementCategory: getAnnouncementCategoryModel(sequelize),
+}
+
+for (const modelKey in models) {
+    if (typeof models[modelKey]?.associate === 'function') models[modelKey]?.associate(models);
 }
 
 // Связываю юзера и роли

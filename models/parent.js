@@ -12,7 +12,8 @@ const getParentModel = sequelize => {
         bonuses: {
             type: DataTypes.INTEGER,
             default: 0
-        }
+        },
+        address: DataTypes.STRING,
     })
 
     return Parent;
