@@ -12,7 +12,6 @@ const getAnnouncementCategoryModel = sequelize => {
         },
         code: {
             type: DataTypes.STRING,
-            unique: false,
             allowNull: false
         },
         icon_mdi: {

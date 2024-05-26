@@ -17,8 +17,9 @@ const getAnnouncementModel = sequelize => {
         price: DataTypes.INTEGER,
         status: {
             type: DataTypes.STRING,
-            values: ["draft", "moderation", "active", "ordered", "archive"]
+            values: ["draft", "moderation", "rejected", "active", "waitingPayment", "ordered", "archive"]
         },
+        reject_reason: DataTypes.STRING,
         max_age: {
             type: DataTypes.INTEGER,
             default: 96

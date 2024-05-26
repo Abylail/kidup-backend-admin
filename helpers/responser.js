@@ -17,6 +17,6 @@ export const createWhere = (whereParams = {}) => {
     if (whereParams[key]) result[key] = whereParams[key]
   })
 
-  return result;
+  return Object.keys(result).length ? result : undefined;
 }
 
