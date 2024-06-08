@@ -4,11 +4,12 @@ import models from "../../../models/index.js";
 import {createResponse, createWhere} from "../../../helpers/responser.js";
 
 export const getList = async (req, res) => {
-    const {limit, offset, category} = req.query;
+    const {limit, offset, category, status} = req.query;
     const list = await models.Announcement.findAll({
         limit: +limit || undefined,
         offset: +offset || undefined,
         order: [['updatedAt', 'DESC']],
+        where: createWhere({status}),
         include: [
             {
                 model: models.AnnouncementCategory,
@@ -18,6 +19,16 @@ export const getList = async (req, res) => {
                 through: { attributes: [] }
             }
         ]
+    })
+
+    return res.status(200).json(createResponse(list));
+}
+
+export const getListByIds = async (req, res) => {
+    const {ids} = req.body;
+    if (!Array.isArray(ids)) return res.status(200).json(createResponse([]))
+    const list = await models.Announcement.findAll({
+        where: {id: ids},
     })
 
     return res.status(200).json(createResponse(list));
