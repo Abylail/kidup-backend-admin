@@ -68,3 +68,29 @@ export const deleteChildren = async (req, res) => {
     const children = await models.Child.findAll({where: {parent_id: parentId}});
     return res.status(200).json(createResponse(children));
 }
+
+export const setFavorite = async (req, res) => {
+    const parentId = req.parentId;
+    const {favorite_ids} = req.body;
+
+    try {
+        await models.Parent.update({favorite_ids}, {where: {id: parentId}})
+    } catch (e) {
+        res.status(500).json(createError("Не могу обновить пользователя"));
+    }
+
+    return res.status(200).json(createResponse(favorite_ids))
+}
+
+export const setCart = async (req, res) => {
+    const parentId = req.parentId;
+    const {cart} = req.body;
+
+    try {
+        await models.Parent.update({cart}, {where: {id: parentId}})
+    } catch (e) {
+        res.status(500).json(createError("Не могу обновить пользователя"));
+    }
+
+    return res.status(200).json(createResponse(cart))
+}

@@ -14,6 +14,8 @@ const getParentModel = sequelize => {
             default: 0
         },
         address: DataTypes.STRING,
+        favorite_ids: DataTypes.JSON,
+        cart: DataTypes.JSON
     })
 
     return Parent;

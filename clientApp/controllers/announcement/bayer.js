@@ -23,6 +23,22 @@ export const getList = async (req, res) => {
     return res.status(200).json(createResponse(list));
 }
 
+export const getSingle = async (req, res) => {
+    const {id} = req.params;
+    const item = await models.Announcement.findByPk(id, {
+        include: [
+            {
+                model: models.AnnouncementCategory,
+                as: 'categories',
+                attributes: {exclude: ["id", "announcement_category", "createdAt", "updatedAt"]},
+                through: { attributes: [] }
+            }
+        ]
+    })
+
+    return res.status(200).json(createResponse(item));
+}
+
 export const getCategories = async (req, res) => {
     const list = await models.AnnouncementCategory.findAll({
         attributes: {exclude: ["id", "createdAt", "updatedAt"]}

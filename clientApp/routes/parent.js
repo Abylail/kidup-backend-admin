@@ -1,7 +1,14 @@
 import express from "express";
 import {phoneSmsAuth, sendSms, tokenAuth} from "../controllers/parent/auth.js";
 import parentAuth from "../middlewares/parentAuth.js";
-import {addChildren, getChildren, updateChildren, updateInfo, deleteChildren} from "../controllers/parent/data.js";
+import {
+    addChildren,
+    getChildren,
+    updateChildren,
+    updateInfo,
+    deleteChildren,
+    setFavorite, setCart
+} from "../controllers/parent/data.js";
 import {
     callRequest,
     registerActiveTrialList,
@@ -33,6 +40,9 @@ export default () => {
     router.post("/request", parentAuth, parentRequest)
 
     router.get("/toySubscribe", parentAuth, getSubscribe)
+
+    router.put("/setFavorite", parentAuth, setFavorite)
+    router.put("/setCart", parentAuth, setCart)
 
     return router;
 }
