@@ -11,8 +11,8 @@ const getAnnouncementModel = sequelize => {
             type: DataTypes.STRING,
             required: true
         },
-        description: DataTypes.STRING,
-        use_experience: DataTypes.STRING,
+        description: DataTypes.TEXT,
+        use_experience: DataTypes.TEXT,
         brand: DataTypes.STRING,
         price: DataTypes.INTEGER,
         status: {

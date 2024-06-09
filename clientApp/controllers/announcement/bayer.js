@@ -56,3 +56,13 @@ export const getCategories = async (req, res) => {
     });
     return res.status(200).json(createResponse(list));
 }
+
+export const buy = async (req, res) => {
+    const parentId = req.parentId;
+    const {ids} = req.body;
+    if (!Array.isArray(ids)) return res.status(200).json(createResponse([]))
+    const list = await models.Announcement.findAll({
+        where: {id: ids, status: "active"},
+    })
+    return res.status(200).json(createResponse({ok: "ok"}))
+}
