@@ -8,7 +8,16 @@ export const getList = async (req, res) => {
         where: createWhere({status}),
         include: [
             {
-              model: models.Parent,
+                model: models.Parent,
+                foreignKey: "seller_id",
+                as: "seller",
+                attributes: ["phone", "first_name", "last_name"]
+            },
+            {
+                model: models.Parent,
+                foreignKey: "buyer_id",
+                as: "buyer",
+                attributes: ["phone", "first_name", "last_name"]
             },
             {
                 model: models.AnnouncementCategory,

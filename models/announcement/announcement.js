@@ -35,13 +35,17 @@ const getAnnouncementModel = sequelize => {
         express_delivery: {
             type: DataTypes.BOOLEAN,
             default: false
+        },
+        need_disinfected: {
+            type: DataTypes.BOOLEAN,
+            default: false
         }
     })
 
     Announcement.associate = models => {
         models.Announcement.belongsToMany(models.AnnouncementCategory, {through: "announcement_category", as: "categories"});
-        models.Announcement.belongsTo(models.Parent, {foreignKey: "seller_id"});
-        models.Announcement.belongsTo(models.Parent, {foreignKey: "buyer_id"});
+        models.Announcement.belongsTo(models.Parent, {foreignKey: "seller_id", as: "seller"});
+        models.Announcement.belongsTo(models.Parent, {foreignKey: "buyer_id", as: "buyer"});
     }
 
     return Announcement;
