@@ -1,7 +1,7 @@
 
 // Получить список объявлений
 import models from "../../../models/index.js";
-import {createResponse, createWhere} from "../../../helpers/responser.js";
+import {createError, createResponse, createWhere} from "../../../helpers/responser.js";
 
 export const getList = async (req, res) => {
     const {limit, offset, category, status} = req.query;
@@ -59,10 +59,28 @@ export const getCategories = async (req, res) => {
 
 export const buy = async (req, res) => {
     const parentId = req.parentId;
-    const {ids} = req.body;
-    if (!Array.isArray(ids)) return res.status(200).json(createResponse([]))
+    const {ids, needDisinfected} = req.body;
+    if (!Array.isArray(ids) || typeof needDisinfected !== 'object') return res.status(500).json(createError("Неверные параметры"))
+
+    const needDisinfectedIds = Object.keys(needDisinfected).filter(id => needDisinfected[id]);
+
+    try {
+        await models.Announcement.update({sell_date: new Date(), buyer_id: parentId, status: "waitingPayment"}, {where: {id: ids}})
+        if (needDisinfectedIds.length > 0) await models.Announcement.update({need_disinfected: true}, {where: {id: needDisinfectedIds}})
+        await models.Parent.update({cart: []}, {where: {id: parentId}});
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json(createError("Не могу обновить"))
+    }
+
+    return res.status(200).json({status: "OK"})
+}
+
+export const myPurchases = async (req, res) => {
+    const parentId = req.parentId;
     const list = await models.Announcement.findAll({
-        where: {id: ids, status: "active"},
+        order: [['updatedAt', 'DESC']],
+        where: createWhere({buyer_id: parentId}),
     })
-    return res.status(200).json(createResponse({ok: "ok"}))
+    return res.status(200).json(createResponse(list));
 }

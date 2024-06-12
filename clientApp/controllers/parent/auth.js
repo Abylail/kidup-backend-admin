@@ -74,7 +74,7 @@ export const tokenAuth = async (req, res) => {
 
     const parentUser = await models.Parent.findByPk(parentId, {
         attributes: {
-            exclude: ["id", "createdAt", "updatedAt"]
+            exclude: ["createdAt", "updatedAt"]
         }
     });
     if (!parentUser) return res.status(401).json(createError("Пользователь не авторизован"));
