@@ -15,6 +15,7 @@ const getAnnouncementModel = sequelize => {
         use_experience: DataTypes.TEXT,
         brand: DataTypes.STRING,
         price: DataTypes.INTEGER,
+        shopPrice: DataTypes.INTEGER,
         status: {
             type: DataTypes.STRING,
             values: ["draft", "moderation", "rejected", "active", "waitingPayment", "ordered", "archive"]

@@ -12,6 +12,7 @@ import createSeoRoutes from "./seo.js";
 import createToyRoutes from "./toys/toy.js";
 import createToyPacksRoutes from "./toys/toyPacks.js";
 import createAnnouncementRoutes from "./announcement.js";
+import createGeoRoutes from "./geo.js";
 
 export default app => {
     const BaseUrl = "/api/v1/client";
@@ -26,4 +27,5 @@ export default app => {
     app.use(`${BaseUrl}/toy`, cache(0.08), createToyRoutes(app))
     app.use(`${BaseUrl}/toyPacks`, /*cache(0.08), */createToyPacksRoutes(app))
     app.use(`${BaseUrl}/announcement`, /*cache(0.08), */createAnnouncementRoutes(app))
+    app.use(`${BaseUrl}/geo`, /*cache(0.08), */createGeoRoutes(app))
 }
