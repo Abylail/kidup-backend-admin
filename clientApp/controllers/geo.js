@@ -13,7 +13,7 @@ export const getGeo = async (req, res) => {
 
     const request = http.request(reqOptions, r => {
         r.setEncoding("utf8");
-        r.on("data", (r) => res.status(200).json(r))
+        r.on("data", (r) => res.status(200).json(JSON.parse(r)))
     });
 
     request.on("error", (e) => res.status(500).json(createError("Город не определяется")));
