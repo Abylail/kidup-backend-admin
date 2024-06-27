@@ -29,13 +29,13 @@ export const createAnnouncement = async (req, res) => {
     const parentId = req.parentId;
     const announcementData = req.body || {};
     const {
-        title, description, use_experience, brand, price, max_age, min_age,
+        title, description, use_experience, brand, price, max_age, min_age, city,
         categories = [],
         photoBuffers = [],
     } = req.body;
     const status = "moderation";
 
-    if (["title", "description", "use_experience", "price", "max_age", "min_age"].some(key => !announcementData[key])) return res.status(500).json(createError("Не хватает аргументов"));
+    if (["title", "description", "use_experience", "price", "max_age", "min_age", "city"].some(key => !announcementData[key])) return res.status(500).json(createError("Не хватает аргументов"));
 
     const categoriesData = await models.AnnouncementCategory.findAll({where: {code: categories}})
     if (!categories.length || !categoriesData?.length) return res.status(500).json(createError("Добавьте категории"));
@@ -46,7 +46,7 @@ export const createAnnouncement = async (req, res) => {
 
     // Создаю
     try {
-        announcement = await models.Announcement.create({title, description, use_experience, brand, price, max_age, min_age: +min_age, status, seller_id: parentId, photos: filePathList});
+        announcement = await models.Announcement.create({title, description, use_experience, brand, price, max_age, min_age: +min_age, status, seller_id: parentId, photos: filePathList, city});
     } catch (e) {
         return res.status(500).json(createError("Не могу создать"));
     }
@@ -77,7 +77,7 @@ export const updateAnnouncement = async (req, res) => {
     const announcementData = req.body || {};
 
     const {
-        title, description, use_experience, brand, price, max_age, min_age, photos,
+        title, description, use_experience, brand, price, max_age, min_age, photos, city,
         categories = [],
         photoBuffers = [],
     } = req.body;
@@ -94,7 +94,7 @@ export const updateAnnouncement = async (req, res) => {
     // Создаю
     try {
         await announcement.update(
-            {title, description, use_experience, brand, price, max_age, min_age, status, seller_id: parentId, photos},
+            {title, description, use_experience, brand, price, max_age, min_age, status, seller_id: parentId, photos, city},
         );
     } catch (e) {
         return res.status(500).json(createError("Не могу создать"));

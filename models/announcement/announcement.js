@@ -40,6 +40,10 @@ const getAnnouncementModel = sequelize => {
         need_disinfected: {
             type: DataTypes.BOOLEAN,
             default: false
+        },
+        city: {
+            type: DataTypes.STRING,
+            default: "almaty"
         }
     })
 
