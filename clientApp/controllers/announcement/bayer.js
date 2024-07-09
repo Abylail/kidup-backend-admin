@@ -4,12 +4,12 @@ import models from "../../../models/index.js";
 import {createError, createResponse, createWhere} from "../../../helpers/responser.js";
 
 export const getList = async (req, res) => {
-    const {limit, offset, category, status} = req.query;
+    const {limit, offset, category, status, city} = req.query;
     const list = await models.Announcement.findAll({
         limit: +limit || undefined,
         offset: +offset || undefined,
         order: [['updatedAt', 'DESC']],
-        where: createWhere({status}),
+        where: createWhere({status, city}),
         include: [
             {
                 model: models.AnnouncementCategory,
