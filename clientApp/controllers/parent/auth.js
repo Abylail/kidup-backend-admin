@@ -3,6 +3,7 @@ import {createError, createResponse} from "../../../helpers/responser.js";
 import "dotenv/config";
 import {generateToken} from "../../../helpers/generateAccessToken.js";
 import {sendSmsService} from "../../../services/sendSms.js";
+import bcrypt from "bcrypt";
 
 // Генерация случайных 4 чисел
 const generateSmsCode = () => Math.floor(1000 + Math.random() * 9000);
@@ -43,6 +44,29 @@ export const parentExist = async (req, res) => {
 export const phoneSmsConfirm = async (req, res) => {
     const {phone, sms_code} = req.body;
     return await models.SmsConfirm.findOne({where: {phone, sms_code}})
+}
+
+export const setPassword = async (req, res) => {
+    const parentId = req.parentId;
+    const {password} = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await models.Parent.update({password: hashedPassword}, {where: {id: parentId}});
+    return res.status(200).json({status: "OK"});
+}
+
+export const phonePasswordLogin = async (req, res) => {
+    const {phone, password} = req.body;
+    if (!phone || !password) return res.status(500).json(createError("Отсутсвуют нужные атрибуты"));
+
+    const parentUser = await models.Parent.findOne({where: {phone}});
+    if (!parentUser) return res.status(401).json(createError("Пользователь не найден"));
+
+    const passwordMatch = await bcrypt.compare(password, parentUser.password);
+    if (!passwordMatch) return res.status(401).json(createError("Неверный пароль"));
+
+    const token = generateToken({id: parentUser.dataValues.id, type: "parent"})
+    return res.status(200).json(createResponse({...parentUser.dataValues, token}))
 }
 
 export const phoneSmsAuth = async (req, res) => {

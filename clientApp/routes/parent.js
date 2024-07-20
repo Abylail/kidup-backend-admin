@@ -1,5 +1,5 @@
 import express from "express";
-import {phoneSmsAuth, sendSms, tokenAuth} from "../controllers/parent/auth.js";
+import {phonePasswordLogin, phoneSmsAuth, sendSms, setPassword, tokenAuth} from "../controllers/parent/auth.js";
 import parentAuth from "../middlewares/parentAuth.js";
 import {
     addChildren,
@@ -23,6 +23,8 @@ export default () => {
 
     router.post("/sendSms", sendSms);
     router.post("/smsAuth", phoneSmsAuth);
+    router.post("/login", phonePasswordLogin);
+    router.post("/setpass", parentAuth, setPassword);
     router.get("/tokenAuth", parentAuth, tokenAuth);
 
 

@@ -9,6 +9,10 @@ const getParentModel = sequelize => {
             type: DataTypes.STRING,
             unique: false
         },
+        password: {
+          type: DataTypes.STRING,
+          allowNull: true
+        },
         bonuses: {
             type: DataTypes.INTEGER,
             default: 0
