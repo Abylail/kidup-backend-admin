@@ -44,6 +44,9 @@ const getAnnouncementModel = sequelize => {
         city: {
             type: DataTypes.STRING,
             default: "almaty"
+        },
+        tag: {
+            type: DataTypes.STRING,
         }
     })
 
