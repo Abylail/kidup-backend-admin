@@ -4,12 +4,12 @@ import models from "../../../models/index.js";
 import {createError, createResponse, createWhere} from "../../../helpers/responser.js";
 
 export const getList = async (req, res) => {
-    const {limit, offset, category, status, city} = req.query;
+    const {limit, offset, category, status, city, seller} = req.query;
     const list = await models.Announcement.findAll({
         limit: +limit || undefined,
         offset: +offset || undefined,
         order: [['updatedAt', 'DESC']],
-        where: createWhere({status, city}),
+        where: createWhere({status, city, seller_id: seller}),
         include: [
             {
                 model: models.AnnouncementCategory,
@@ -17,6 +17,12 @@ export const getList = async (req, res) => {
                 where: createWhere({code: category}),
                 attributes: {exclude: ["id", "announcement_category", "createdAt", "updatedAt"]},
                 through: { attributes: [] }
+            },
+            {
+                model: models.Parent,
+                foreignKey: "seller_id",
+                as: "seller",
+                attributes: ["first_name", "last_name"]
             }
         ]
     })
@@ -43,6 +49,12 @@ export const getSingle = async (req, res) => {
                 as: 'categories',
                 attributes: {exclude: ["id", "announcement_category", "createdAt", "updatedAt"]},
                 through: { attributes: [] }
+            },
+            {
+                model: models.Parent,
+                foreignKey: "seller_id",
+                as: "seller",
+                attributes: ["first_name", "last_name"]
             }
         ]
     })
