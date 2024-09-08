@@ -173,7 +173,7 @@ export const publishDraft = async (req, res) => {
     const parentId = req.parentId;
     const {id} = req.params;
 
-    await models.Announcement.update({status: "moderating"}, {where: {id, seller_id: parentId}})
+    await models.Announcement.update({status: "moderation"}, {where: {id, seller_id: parentId}})
 
     return res.status(200).json({status: "OK"})
 }
