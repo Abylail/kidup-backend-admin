@@ -192,7 +192,7 @@ export const addPhotoAnnouncement = async (req, res) => {
     const photos = announcement.dataValues.photos || [];
     photos.push(filePath);
     try {
-        await announcement.update({photos})
+        await models.Announcement.update({photos}, {where: {id, seller_id: parentId}});
     } catch (e) {
         return res.status(500).json(createError("Не удается обновить объявление"));
     }
@@ -216,7 +216,7 @@ export const removePhotoAnnouncement = async (req, res) => {
             await removeFile(photoPath);
             const removeIndex = photos.findIndex(p => photoPath === p);
             photos.splice(removeIndex, 1);
-            await announcement.update({photos})
+            await models.Announcement.update({photos}, {where: {id, seller_id: parentId}});
         }
     } catch (e) {
         return res.status(500).json(createError("Не удается обновить объявление"));
