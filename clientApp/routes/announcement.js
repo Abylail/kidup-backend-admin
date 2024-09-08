@@ -1,6 +1,12 @@
 import express from "express";
 import parentAuth from "../middlewares/parentAuth.js";
-import {createAnnouncement, getMyAnnouncements, updateAnnouncement} from "../controllers/announcement/seller.js";
+import {
+    addPhotoAnnouncement,
+    createAnnouncement, deleteAnnouncement,
+    getDraftAnnouncement,
+    getMyAnnouncements, publishDraft, removePhotoAnnouncement,
+    updateAnnouncement
+} from "../controllers/announcement/seller.js";
 import {buy, getCategories, getList, getListByIds, getSingle, myPurchases} from "../controllers/announcement/bayer.js";
 
 export default () => {
@@ -13,7 +19,12 @@ export default () => {
     router.get("/my", parentAuth, getMyAnnouncements);
     router.get("/purchases", parentAuth, myPurchases);
     router.post("/create", parentAuth, createAnnouncement);
+    router.get("/draft", parentAuth, getDraftAnnouncement);
     router.put("/update/:id", parentAuth, updateAnnouncement);
+    router.put("/publish/:id", parentAuth, publishDraft);
+    router.post("/update/:id/addphoto", parentAuth, addPhotoAnnouncement);
+    router.post("/update/:id/removephoto", parentAuth, removePhotoAnnouncement);
+    router.delete("/delete/:id", parentAuth, deleteAnnouncement);
     router.post("/buy", parentAuth, buy);
 
     return router;
