@@ -2,7 +2,7 @@ import {createError} from "../../helpers/responser.js";
 import {decodeToken} from "../../helpers/generateAccessToken.js";
 
 export default (req, res, next) => {
-    const token = req.cookies.userToken;
+    const token = req.cookies.userToken || req.header('Authorization').replace('Bearer ', '');
 
     if (!token) return res.status(401).json(createError("Пользователь не авторизован"))
 
