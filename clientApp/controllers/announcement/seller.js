@@ -24,12 +24,37 @@ export const getMyAnnouncements = async (req, res) => {
     return res.status(200).json(createResponse(list));
 }
 
+export const getMyAnnouncement = async (req, res) => {
+    const parentId = req.parentId;
+    const {id} = req.params;
+
+    if (!parentId) return res.status(404).json(createError("Не найдено"))
+    const announcement = await models.Announcement.findOne({
+        where: {
+            id,
+            seller_id: parentId,
+        },
+        include: [
+            {
+                model: models.AnnouncementCategory,
+                as: 'categories',
+                attributes: {include: ["code"]},
+                through: { attributes: [] }
+            }
+        ]
+    })
+
+    if (!announcement) return res.status(404).json(createError("Не найдено"))
+
+    return res.status(200).json(createResponse(announcement));
+}
+
 // Получить новый драфт пользователя
 export const getDraftAnnouncement = async (req, res) => {
     const parentId = req.parentId;
     if (!parentId) return res.status(500).json(createError("Не авторизован"));
 
-    const initData = {seller_id: parentId, status: "draft", photos: null};
+    const initData = {seller_id: parentId, status: "draft"};
 
     try {
         const [draft, created] = await models.Announcement.findOrCreate({

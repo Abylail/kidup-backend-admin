@@ -3,7 +3,7 @@ import parentAuth from "../middlewares/parentAuth.js";
 import {
     addPhotoAnnouncement,
     createAnnouncement, deleteAnnouncement,
-    getDraftAnnouncement,
+    getDraftAnnouncement, getMyAnnouncement,
     getMyAnnouncements, publishDraft, removePhotoAnnouncement,
     updateAnnouncement
 } from "../controllers/announcement/seller.js";
@@ -14,6 +14,7 @@ export default () => {
 
     router.get("/list", getList);
     router.post("/list", parentAuth, getListByIds);
+    router.get("/get/:id", parentAuth, getMyAnnouncement);
     router.get("/single/:id", getSingle);
     router.get("/categories", getCategories);
     router.get("/my", parentAuth, getMyAnnouncements);
