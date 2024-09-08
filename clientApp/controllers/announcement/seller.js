@@ -192,7 +192,7 @@ export const addPhotoAnnouncement = async (req, res) => {
     const photos = announcement.dataValues.photos || [];
     photos.push(filePath);
     try {
-        announcement.update({photos})
+        await announcement.update({photos})
     } catch (e) {
         return res.status(500).json(createError("Не удается обновить объявление"));
     }
@@ -214,7 +214,7 @@ export const removePhotoAnnouncement = async (req, res) => {
     try {
         if (photos.includes(photoPath)) {
             await removeFile(photoPath);
-            const removeIndex = photos.indexOf(photoPath);
+            const removeIndex = photos.findIndex(p => photoPath === p);
             photos.splice(removeIndex, 1);
             await announcement.update({photos})
         }
