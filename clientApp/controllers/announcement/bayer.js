@@ -5,7 +5,7 @@ import {createError, createResponse, createWhere} from "../../../helpers/respons
 
 export const getList = async (req, res) => {
     const {limit, offset, category, status, city, seller} = req.query;
-    const list = await models.Announcement.findAll({
+    let list = await models.Announcement.findAll({
         limit: +limit || undefined,
         offset: +offset || undefined,
         order: [['updatedAt', 'DESC']],
@@ -27,14 +27,24 @@ export const getList = async (req, res) => {
         ]
     })
 
+    // Цена с доставкой
+    list.forEach(item => {
+        item.price = item.price + item.delivery_price;
+    })
+
     return res.status(200).json(createResponse(list));
 }
 
 export const getListByIds = async (req, res) => {
     const {ids} = req.body;
     if (!Array.isArray(ids)) return res.status(200).json(createResponse([]))
-    const list = await models.Announcement.findAll({
+    let list = await models.Announcement.findAll({
         where: {id: ids},
+    })
+
+    // Цена с доставкой
+    list.forEach(item => {
+        item.price = item.price + item.delivery_price;
     })
 
     return res.status(200).json(createResponse(list));
@@ -42,7 +52,7 @@ export const getListByIds = async (req, res) => {
 
 export const getSingle = async (req, res) => {
     const {id} = req.params;
-    const item = await models.Announcement.findByPk(id, {
+    let item = await models.Announcement.findByPk(id, {
         include: [
             {
                 model: models.AnnouncementCategory,
@@ -58,6 +68,9 @@ export const getSingle = async (req, res) => {
             }
         ]
     })
+
+    // Цена с доставкой
+    item.price = item.price + item.delivery_price;
 
     return res.status(200).json(createResponse(item));
 }
@@ -90,9 +103,15 @@ export const buy = async (req, res) => {
 
 export const myPurchases = async (req, res) => {
     const parentId = req.parentId;
-    const list = await models.Announcement.findAll({
+    let list = await models.Announcement.findAll({
         order: [['updatedAt', 'DESC']],
         where: createWhere({buyer_id: parentId}),
     })
+
+    // Цена с доставкой
+    list.forEach(item => {
+        item.price = item.price + item.delivery_price;
+    })
+
     return res.status(200).json(createResponse(list));
 }

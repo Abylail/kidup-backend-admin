@@ -15,6 +15,10 @@ const getAnnouncementModel = sequelize => {
         use_experience: DataTypes.TEXT,
         brand: DataTypes.STRING,
         price: DataTypes.INTEGER,
+        delivery_price: {
+            type: DataTypes.INTEGER,
+            defaultValue: 2000
+        },
         shopPrice: DataTypes.INTEGER,
         status: {
             type: DataTypes.STRING,

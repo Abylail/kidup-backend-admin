@@ -87,6 +87,9 @@ export const createAnnouncement = async (req, res) => {
     } = req.body;
     const status = "moderation";
 
+    // Цена доставки
+    const deliveryPrice = 2000;
+
     if (["title", "description", "use_experience", "price", "max_age", "min_age", "city"].some(key => !announcementData[key])) return res.status(500).json(createError("Не хватает аргументов"));
 
     const categoriesData = await models.AnnouncementCategory.findAll({where: {code: categories}})
@@ -96,7 +99,7 @@ export const createAnnouncement = async (req, res) => {
 
     // Создаю
     try {
-        announcement = await models.Announcement.create({title, description, use_experience, brand, price, max_age, min_age: +min_age, status, seller_id: parentId, photos: [], city});
+        announcement = await models.Announcement.create({title, description, use_experience, brand, price, max_age, min_age: +min_age, status, seller_id: parentId, photos: [], city, delivery_price: deliveryPrice});
     } catch (e) {
         return res.status(500).json(createError("Не могу создать"));
     }
